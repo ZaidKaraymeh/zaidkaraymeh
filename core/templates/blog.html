@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block blog %}
+    <li class="nav-item">
+    <a class="nav-link active text-1 fs-5" href="{% url 'blog' %}">Blog </a>
+    </li>
+{% endblock blog %}
+{% block content %}
+<section  class="container container-margin my-5" style="min-height:100vh;">
+
+    <h2> Latest Blog Posts </h2>
+    <div class="row">
+    {% for blog in blogs %}
+        <div class="col-xl-12 my-2">
+            <a class="text-decoration-none text-2" href="{% url 'blog_detail' blog.title %}"  >
+                <div class="card bg-1 blog" style="min-width: 100%;">
+                    <div class="card-body">
+                        <h5 class="card-title text-1"> {{blog.title}} </h5>
+                        <p class="card-text "> {{blog.summary|safe}}</p>
+                        <p class="card-text text-white"> {{blog.created_at}}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+    {% endfor %}
+    <a href="#"  class="text-decoration-none text-start my-2">
+        <h5> View All <i class="fa-solid fa-arrow-right "></i></h5>
+        
+    </a>
+    </div>
+</section>
+
+{% endblock content %}
