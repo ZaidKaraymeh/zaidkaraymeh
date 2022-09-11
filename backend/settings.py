@@ -176,3 +176,4 @@ CKEDITOR_CONFIGS = {
 }
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+CSRF_TRUSTED_ORIGINS = ['https://zaidkaraymeh-production.up.railway.app']
