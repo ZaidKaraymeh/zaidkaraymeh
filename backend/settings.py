@@ -166,7 +166,7 @@ CKEDITOR_CONFIGS = {
 
     }
 }
-TIME_ZONE = 'Asia/bahrain'
+TIME_ZONE = 'Asia/Bahrain'
 
 USE_I18N = True
 
