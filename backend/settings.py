@@ -174,17 +174,17 @@ USE_L10N = True
 
 USE_TZ = True
 
+import dj_database_url
+#SECURE_SSL_REDIRECT = True
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+db_config = dj_database_url.config(default=DATABASE_URL, conn_max_age=1800)
+db_config['ENGINE'] = 'django.db.backends.postgresql'
+DATABASES = {
+    "default": db_config
+}
 
 if not DEBUG:
-    import dj_database_url
-    #SECURE_SSL_REDIRECT = True
-
-    DATABASE_URL = os.getenv("DATABASE_URL")
-    db_config = dj_database_url.config(default=DATABASE_URL, conn_max_age=1800)
-    db_config['ENGINE'] = 'django.db.backends.postgresql'
-    DATABASES = {
-        "default": db_config
-    }
     MIDDLEWARE = [*MIDDLEWARE, "whitenoise.middleware.WhiteNoiseMiddleware"]
     CSRF_TRUSTED_ORIGINS = ['https://zaidkaraymeh-production.up.railway.app', 'https://www.zaidkaraymeh.com']
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
