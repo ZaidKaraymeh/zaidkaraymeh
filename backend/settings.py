@@ -141,7 +141,7 @@ CKEDITOR_CONFIGS = {
 
         'toolbar_CustomConfig': [
             {'name': 'styles', 'items': ['Styles', 'Format', 'Font', 'FontSize', 'Undo', 'Redo', 'Maximize', 'ShowBlocks']},
-            {'name': 'document', 'items': ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates']},
+            {'name': 'document', 'items': ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates', 'TextField', 'Textarea', "Image"]},
             {'name': 'basicstyles',
              'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat', 'CodeSnippet']},
             {'name': 'paragraph',
@@ -166,6 +166,13 @@ CKEDITOR_CONFIGS = {
 
     }
 }
+TIME_ZONE = 'Asia/bahrain'
+
+USE_I18N = True
+
+USE_L10N = True
+
+USE_TZ = True
 
 
 if not DEBUG:
