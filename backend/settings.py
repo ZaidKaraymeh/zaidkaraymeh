@@ -179,5 +179,5 @@ if not DEBUG:
         "default": db_config
     }
     MIDDLEWARE = [*MIDDLEWARE, "whitenoise.middleware.WhiteNoiseMiddleware"]
-    CSRF_TRUSTED_ORIGINS = ['https://zaidkaraymeh-production.up.railway.app']
+    CSRF_TRUSTED_ORIGINS = ['https://zaidkaraymeh-production.up.railway.app', 'https://www.zaidkaraymeh.com']
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
