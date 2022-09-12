@@ -29,7 +29,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['zaidkaraymeh-production.up.railway.app', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['zaidkaraymeh-production.up.railway.app', '127.0.0.1', 'localhost', 'zaidkaraymeh.com', 'www.zaidkaraymeh.com']
 
 
 # Application definition
@@ -47,7 +47,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -87,14 +86,7 @@ DATABASES = {
     }
 }
 
-import dj_database_url
 
-DATABASE_URL = os.getenv("DATABASE_URL")
-db_config = dj_database_url.config(default=DATABASE_URL, conn_max_age=1800)
-db_config['ENGINE'] = 'django.db.backends.postgresql'
-DATABASES = {
-    "default": db_config
-}
 
 
 # Password validation
@@ -175,5 +167,16 @@ CKEDITOR_CONFIGS = {
     }
 }
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-CSRF_TRUSTED_ORIGINS = ['https://zaidkaraymeh-production.up.railway.app']
+
+if not DEBUG:
+    import dj_database_url
+
+    DATABASE_URL = os.getenv("DATABASE_URL")
+    db_config = dj_database_url.config(default=DATABASE_URL, conn_max_age=1800)
+    db_config['ENGINE'] = 'django.db.backends.postgresql'
+    DATABASES = {
+        "default": db_config
+    }
+    MIDDLEWARE = [*MIDDLEWARE, "whitenoise.middleware.WhiteNoiseMiddleware"]
+    CSRF_TRUSTED_ORIGINS = ['https://zaidkaraymeh-production.up.railway.app']
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
