@@ -12,7 +12,7 @@
         <div class="col-xl-12 my-2">
             <div class="card bg-1" style="min-width: 100%;">
                 <div class="card-body">
-                    <p class="card-text text-white"> {{blog.user.firstname}}</p>
+                    <p class="card-text text-white"> By {{blog.user.first_name}} {{blog.user.last_name}}</p>
                     <p class="card-text text-white"> {{blog.created_at}}</p>
                     <p class="card-text "> {{blog.summary|safe}}</p>
                     <p class="card-text text-4"> {{blog.content|safe}}</p>
