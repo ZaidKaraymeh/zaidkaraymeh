@@ -79,7 +79,7 @@ section::before {
   background: #555;
 }
 
-.img-w {
+img {
     max-width: 100%;
     height: auto !important;
 }

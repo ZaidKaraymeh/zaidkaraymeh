@@ -78,3 +78,8 @@ section::before {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+.img-w {
+    max-width: 100%;
+    height: auto !important;
+}
