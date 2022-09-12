@@ -170,6 +170,7 @@ CKEDITOR_CONFIGS = {
 
 if not DEBUG:
     import dj_database_url
+    SECURE_SSL_REDIRECT = True
 
     DATABASE_URL = os.getenv("DATABASE_URL")
     db_config = dj_database_url.config(default=DATABASE_URL, conn_max_age=1800)
