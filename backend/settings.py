@@ -29,7 +29,9 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['zaidkaraymeh-production.up.railway.app', '127.0.0.1', 'localhost', 'zaidkaraymeh.com', 'www.zaidkaraymeh.com']
+ALLOWED_HOSTS = [
+    'zaidkaraymeh-production.up.railway.app', 
+    '127.0.0.1', 'localhost', 'zaidkaraymeh.com', 'www.zaidkaraymeh.com']
 
 
 # Application definition
@@ -186,5 +188,7 @@ DATABASES = {
 
 if not DEBUG:
     MIDDLEWARE = [*MIDDLEWARE, "whitenoise.middleware.WhiteNoiseMiddleware"]
-    CSRF_TRUSTED_ORIGINS = ['https://zaidkaraymeh-production.up.railway.app', 'https://www.zaidkaraymeh.com']
+    CSRF_TRUSTED_ORIGINS = ['https://zaidkaraymeh-production.up.railway.app', 
+                            'https://www.zaidkaraymeh.com', 
+                            'www.zaidkaraymeh.com', 'zaidkaraymeh.com']
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
