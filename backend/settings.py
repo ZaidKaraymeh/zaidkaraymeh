@@ -29,9 +29,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [
-    'zaidkaraymeh-production.up.railway.app', 
-    '127.0.0.1', 'localhost', 'zaidkaraymeh.com', 'www.zaidkaraymeh.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -43,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "corsheaders",
     'core',
     'ckeditor'
 ]
@@ -50,6 +49,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -133,6 +133,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+CORS_ALLOW_ALL_ORIGINS = True
+
 CKEDITOR_CONFIGS = {
     'default': {
         'skin': 'moono',
@@ -188,7 +190,5 @@ DATABASES = {
 
 if not DEBUG:
     MIDDLEWARE = [*MIDDLEWARE, "whitenoise.middleware.WhiteNoiseMiddleware"]
-    CSRF_TRUSTED_ORIGINS = ['https://zaidkaraymeh-production.up.railway.app', 
-                            'https://www.zaidkaraymeh.com', 
-                            'www.zaidkaraymeh.com', 'zaidkaraymeh.com']
+    CSRF_TRUSTED_ORIGINS = ['*']
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
