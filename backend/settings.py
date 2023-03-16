@@ -190,5 +190,6 @@ DATABASES = {
 
 if not DEBUG:
     MIDDLEWARE = [*MIDDLEWARE, "whitenoise.middleware.WhiteNoiseMiddleware"]
-    CSRF_TRUSTED_ORIGINS = ['*']
+    CSRF_TRUSTED_ORIGINS = ['https://www.zaidkaraymeh.com/', 'https://www.zaidkaraymeh.com', 'https://zaidkaraymeh.com/', 
+                            'http://www.zaidkaraymeh.com/', 'http://www.zaidkaraymeh.com']
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
