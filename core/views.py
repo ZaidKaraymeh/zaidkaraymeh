@@ -44,5 +44,10 @@ def me(request):
         {"src": f"{settings.STATIC_URL}me/09-portrait-dark.jpg", "alt": "Portrait of Zaid"},
         {"src": f"{settings.STATIC_URL}me/05-elevator.jpg", "alt": "Zaid in an elevator"},
         {"src": f"{settings.STATIC_URL}me/07-portrait.jpg", "alt": "Portrait of Zaid"},
+        {"src": f"{settings.STATIC_URL}me/14-elevator-bag.jpg", "alt": "Zaid in an elevator with a bag"},
+        {"src": f"{settings.STATIC_URL}me/15-friends.jpg", "alt": "Zaid with friends"},
+        {"src": f"{settings.STATIC_URL}me/16-desk.jpg", "alt": "Zaid working at a desk"},
+        {"src": f"{settings.STATIC_URL}me/17-mirror.jpg", "alt": "Mirror selfie"},
+        {"src": f"{settings.STATIC_URL}me/18-thinking.jpg", "alt": "Zaid thinking at a laptop"},
     ]
     return render(request, 'me.html', {"photos": photos})
