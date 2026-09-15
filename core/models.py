@@ -15,3 +15,20 @@ class Blog(models.Model):
     def __str__(self):
         return self.title
 
+
+class PageVisit(models.Model):
+    path = models.CharField(max_length=500)
+    ip = models.GenericIPAddressField(null=True, blank=True, db_index=True)
+    country = models.CharField(max_length=100, blank=True, db_index=True)
+    country_code = models.CharField(max_length=2, blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    referrer = models.CharField(max_length=500, blank=True)
+    user_agent = models.CharField(max_length=400, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.path} from {self.country or self.ip or 'unknown'}"
+
