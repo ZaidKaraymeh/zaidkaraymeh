@@ -31,6 +31,7 @@ def blog(request, title=''):
 
 def me(request):
     photos = [
+        {"src": f"{settings.STATIC_URL}me/19-signing.jpg", "alt": "VoySera, Zain, and OneCX signing"},
         {"src": f"{settings.STATIC_URL}me/01-park.jpg", "alt": "Zaid in the park"},
         {"src": f"{settings.STATIC_URL}me/02-ghutra-glasses.jpg", "alt": "Zaid in ghutra and glasses"},
         {"src": f"{settings.STATIC_URL}me/13-hills.jpg", "alt": "Zaid in the hills"},
