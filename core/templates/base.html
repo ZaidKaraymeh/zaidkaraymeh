@@ -56,14 +56,19 @@
                 <a class="nav-link active text-white fs-5" href="{% url 'blog' %}">Blog </a>
               </li>
             {% endblock blog %}
+            {% block me %}
+              <li class="nav-item">
+                <a class="nav-link active text-white fs-5" href="{% url 'me' %}">Me </a>
+              </li>
+            {% endblock me %}
             {% block projects %}
               <li class="nav-item">
-                  <a class="nav-link active text-white fs-5" href="#projects">Projects </a>
+                  <a class="nav-link active text-white fs-5" href="{% url 'home' %}#projects">Projects </a>
               </li>
             {% endblock projects %}
             {% block about %}
               <li class="nav-item">
-                  <a class="nav-link active text-white fs-5" href="#about">About </a>
+                  <a class="nav-link active text-white fs-5" href="{% url 'home' %}#about">About </a>
               </li>
             {% endblock about %}
         </ul>

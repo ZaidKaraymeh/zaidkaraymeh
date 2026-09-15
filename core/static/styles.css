@@ -58,3 +58,109 @@ section::before {
   visibility: hidden; 
   pointer-events: none;
 }
+
+.me-page {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 7rem 1.25rem 4rem;
+}
+
+.me-header {
+    text-align: center;
+    margin-bottom: 2.75rem;
+}
+
+.me-kicker {
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    color: #9582e8;
+    margin-bottom: 0.6rem;
+}
+
+.me-header h1 {
+    font-size: clamp(2.6rem, 6vw, 4.4rem);
+    font-weight: 700;
+    margin-bottom: 0.65rem;
+}
+
+.me-sub {
+    font-size: 1.05rem;
+    margin: 0;
+}
+
+.me-grid {
+    column-count: 1;
+    column-gap: 1.1rem;
+}
+
+.me-card {
+    break-inside: avoid;
+    margin: 0 0 1.1rem;
+    border-radius: 18px;
+    overflow: hidden;
+    background: rgb(32, 32, 35);
+    border: 1px solid rgba(149, 130, 232, 0.16);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+}
+
+.me-card-btn {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: zoom-in;
+}
+
+.me-card img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: transform 0.45s ease, filter 0.45s ease;
+}
+
+.me-card:hover img {
+    transform: scale(1.03);
+    filter: brightness(1.05);
+}
+
+.me-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1080;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: rgba(8, 8, 10, 0.92);
+}
+
+.me-lightbox[hidden] {
+    display: none;
+}
+
+.me-lightbox img {
+    max-width: min(92vw, 920px);
+    max-height: 88vh;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+.me-lightbox-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    border: 0;
+    background: transparent;
+    color: #fff;
+    font-size: 2.4rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+@media (min-width: 768px) {
+    .me-grid {
+        column-count: 3;
+    }
+}

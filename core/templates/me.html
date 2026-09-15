@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block me %}
+    <li class="nav-item">
+        <a class="nav-link active text-1 fs-5" href="{% url 'me' %}">Me </a>
+    </li>
+{% endblock me %}
+
+{% block content %}
+<div class="me-page">
+    <header class="me-header">
+        <p class="me-kicker">A few frames</p>
+        <h1 class="color-animation">Me</h1>
+        <p class="me-sub text-2">Portraits, nights out, and the people around me.</p>
+    </header>
+
+    <div class="me-grid">
+        {% for photo in photos %}
+            <figure class="me-card">
+                <button type="button" class="me-card-btn" data-full="{{ photo.src }}" aria-label="Open {{ photo.alt }}">
+                    <img src="{{ photo.src }}" alt="{{ photo.alt }}" loading="lazy">
+                </button>
+            </figure>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="me-lightbox" id="meLightbox" hidden>
+    <button type="button" class="me-lightbox-close" aria-label="Close photo">&times;</button>
+    <img src="" alt="">
+</div>
+<script>
+    (function () {
+        var lightbox = document.getElementById("meLightbox");
+        var image = lightbox.querySelector("img");
+        var closeBtn = lightbox.querySelector(".me-lightbox-close");
+
+        function openPhoto(src, alt) {
+            image.src = src;
+            image.alt = alt || "";
+            lightbox.hidden = false;
+            document.body.style.overflow = "hidden";
+        }
+
+        function closePhoto() {
+            lightbox.hidden = true;
+            image.src = "";
+            document.body.style.overflow = "";
+        }
+
+        document.querySelectorAll(".me-card-btn").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                openPhoto(btn.getAttribute("data-full"), btn.querySelector("img").alt);
+            });
+        });
+
+        closeBtn.addEventListener("click", closePhoto);
+        lightbox.addEventListener("click", function (event) {
+            if (event.target === lightbox) closePhoto();
+        });
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") closePhoto();
+        });
+    })();
+</script>
+{% endblock content %}
