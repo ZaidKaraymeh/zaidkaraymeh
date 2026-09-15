@@ -1,3 +1,23 @@
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+body.no-scroll {
+    position: fixed;
+    width: 100%;
+    overflow: hidden;
+}
+
+img,
+svg {
+    max-width: 100%;
+}
+
 .bg-1 {
     background-color: rgb(23, 23, 23);
 }
@@ -17,7 +37,7 @@
 }
 
 .text-p {
-    font-size: 20px;
+    font-size: clamp(1rem, 4vw, 1.25rem);
 }
 
 .blog:hover {
@@ -29,14 +49,13 @@
 }
 
 .color-animation {
-    /* background: linear-gradient(to right, #ffbc99 20%, #f7a97e 40%, #cabdff 60%, #9a8adb 80%, #f7a97e 100%); */
     background: linear-gradient(to right, #4f308c 20%, #4d247f 40%, #411774 60%, #5340a9 80%, #4d247f 100%);
-  background-size: 200% auto;
-  
-  color: #000;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+    background-size: 200% auto;
+
+    color: #000;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     animation: pulse 5s infinite;
 }
 
@@ -50,119 +69,45 @@
     max-width: 800px;
 }
 
-section::before { 
-  display: block; 
-  content: " "; 
-  margin-top: -50px; 
-  height: 100px; 
-  visibility: hidden; 
-  pointer-events: none;
+.navbar-collapse {
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
-.me-page {
-    max-width: 1120px;
-    margin: 0 auto;
-    padding: 7rem 1.25rem 4rem;
+/* ---------- home ---------- */
+
+.hero {
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 6rem 0 3rem;
 }
 
-.me-header {
-    text-align: center;
-    margin-bottom: 2.75rem;
+.hero-intro {
+    font-size: clamp(1rem, 3.4vw, 1.25rem);
 }
 
-.me-kicker {
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    font-size: 0.78rem;
-    color: #9582e8;
-    margin-bottom: 0.6rem;
+.hero-name {
+    font-size: clamp(2.3rem, 10vw, 4.5rem);
+    line-height: 1.08;
+    margin-bottom: 0.5rem;
 }
 
-.me-header h1 {
-    font-size: clamp(2.6rem, 6vw, 4.4rem);
-    font-weight: 700;
-    margin-bottom: 0.65rem;
+.hero-role {
+    font-size: clamp(1.05rem, 4.4vw, 1.75rem);
+    margin-bottom: 0;
 }
 
-.me-sub {
-    font-size: 1.05rem;
-    margin: 0;
+.hero-role-2 {
+    font-size: clamp(0.95rem, 3.8vw, 1.5rem);
 }
 
-.me-grid {
-    column-count: 1;
-    column-gap: 1.1rem;
+section h2 {
+    font-size: clamp(1.5rem, 6vw, 2rem);
 }
 
-.me-card {
-    break-inside: avoid;
-    margin: 0 0 1.1rem;
-    border-radius: 18px;
-    overflow: hidden;
-    background: rgb(32, 32, 35);
-    border: 1px solid rgba(149, 130, 232, 0.16);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
-}
-
-.me-card-btn {
-    display: block;
-    width: 100%;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    cursor: zoom-in;
-}
-
-.me-card img {
-    display: block;
-    width: 100%;
-    height: auto;
-    transition: transform 0.45s ease, filter 0.45s ease;
-}
-
-.me-card:hover img {
-    transform: scale(1.03);
-    filter: brightness(1.05);
-}
-
-.me-lightbox {
-    position: fixed;
-    inset: 0;
-    z-index: 1080;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1.5rem;
-    background: rgba(8, 8, 10, 0.92);
-}
-
-.me-lightbox[hidden] {
-    display: none;
-}
-
-.me-lightbox img {
-    max-width: min(92vw, 920px);
-    max-height: 88vh;
-    border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
-}
-
-.me-lightbox-close {
-    position: absolute;
-    top: 1rem;
-    right: 1.2rem;
-    border: 0;
-    background: transparent;
-    color: #fff;
-    font-size: 2.4rem;
-    line-height: 1;
-    cursor: pointer;
-}
-
-@media (min-width: 768px) {
-    .me-grid {
-        column-count: 3;
-    }
+.card-text,
+.job-list li {
+    overflow-wrap: break-word;
 }
 
 .job-card {
@@ -213,45 +158,152 @@ section::before {
 .job-photo {
     display: block;
     width: 100%;
+    height: auto;
     max-width: 420px;
     margin-top: 0.9rem;
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-@media (max-width: 575px) {
+/* ---------- /me gallery ---------- */
+
+.me-page {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 4.75rem 1rem 3rem;
+}
+
+.me-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+}
+
+.me-card {
+    margin: 0;
+    aspect-ratio: 4 / 5;
+    border-radius: 16px;
+    overflow: hidden;
+    background: rgb(32, 32, 35);
+    border: 1px solid rgba(149, 130, 232, 0.16);
+    content-visibility: auto;
+    contain-intrinsic-size: auto 420px;
+}
+
+.me-card-btn {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: zoom-in;
+}
+
+.me-card img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.45s ease;
+}
+
+.me-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1080;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(8, 8, 10, 0.94);
+}
+
+.me-lightbox[hidden] {
+    display: none;
+}
+
+.me-lightbox img {
+    max-width: 100%;
+    max-height: 85vh;
+    max-height: 85svh;
+    border-radius: 14px;
+    object-fit: contain;
+}
+
+.me-lightbox-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.75rem;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    background: transparent;
+    color: #fff;
+    font-size: 2.4rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+/* ---------- breakpoints ---------- */
+
+@media (min-width: 576px) {
+    .me-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 768px) {
+    .me-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.1rem;
+    }
+
+    .me-page {
+        padding: 7rem 1.25rem 4rem;
+    }
+}
+
+@media (hover: hover) {
+    .me-card:hover img {
+        transform: scale(1.04);
+    }
+}
+
+@media (max-width: 767.98px) {
+    .text-justify {
+        text-align: left;
+    }
+
+    .mx-3 {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+}
+
+@media (max-width: 575.98px) {
     .job-card {
         flex-direction: column;
         gap: 0.7rem;
+        padding: 1rem;
     }
 
     .job-logo-wrap {
+        flex: 0 0 auto;
+        height: 40px;
         justify-content: flex-start;
     }
-}
 
-/* width */
-::-webkit-scrollbar {
-  width: 10px;
-}
+    .job-logo-wrap img {
+        max-width: 84px;
+        max-height: 36px;
+    }
 
-/* Track */
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
+    .job-list {
+        padding-left: 1rem;
+    }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #888;
+    .job-photo {
+        max-width: 100%;
+    }
 }
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-.img-w {
-    max-width: 100%;
-    height: auto !important;
-} 
- 

@@ -12,7 +12,7 @@
         {% for photo in photos %}
             <figure class="me-card">
                 <button type="button" class="me-card-btn" data-full="{{ photo.src }}" aria-label="Open {{ photo.alt }}">
-                    <img src="{{ photo.src }}" alt="{{ photo.alt }}" loading="lazy">
+                    <img src="{{ photo.thumb }}" alt="{{ photo.alt }}" style="object-position: {{ photo.pos }};" loading="lazy" decoding="async">
                 </button>
             </figure>
         {% endfor %}
@@ -28,18 +28,23 @@
         var lightbox = document.getElementById("meLightbox");
         var image = lightbox.querySelector("img");
         var closeBtn = lightbox.querySelector(".me-lightbox-close");
+        var scrollY = 0;
 
         function openPhoto(src, alt) {
             image.src = src;
             image.alt = alt || "";
             lightbox.hidden = false;
-            document.body.style.overflow = "hidden";
+            scrollY = window.scrollY;
+            document.body.classList.add("no-scroll");
+            document.body.style.top = "-" + scrollY + "px";
         }
 
         function closePhoto() {
             lightbox.hidden = true;
-            image.src = "";
-            document.body.style.overflow = "";
+            image.removeAttribute("src");
+            document.body.classList.remove("no-scroll");
+            document.body.style.top = "";
+            window.scrollTo(0, scrollY);
         }
 
         document.querySelectorAll(".me-card-btn").forEach(function (btn) {
@@ -50,10 +55,10 @@
 
         closeBtn.addEventListener("click", closePhoto);
         lightbox.addEventListener("click", function (event) {
-            if (event.target === lightbox) closePhoto();
+            if (event.target !== image) closePhoto();
         });
         document.addEventListener("keydown", function (event) {
-            if (event.key === "Escape") closePhoto();
+            if (event.key === "Escape" && !lightbox.hidden) closePhoto();
         });
     })();
 </script>
