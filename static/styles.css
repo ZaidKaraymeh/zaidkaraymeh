@@ -165,6 +165,71 @@ section::before {
     }
 }
 
+.job-card {
+    display: flex;
+    gap: 1.15rem;
+    align-items: flex-start;
+    padding: 1.15rem 1.2rem;
+    margin: 0.85rem 0;
+    border-radius: 16px;
+    background: rgb(27, 27, 30);
+    border: 1px solid rgba(149, 130, 232, 0.14);
+}
+
+.job-logo-wrap {
+    flex: 0 0 92px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.job-logo-wrap img {
+    max-width: 92px;
+    max-height: 44px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+.job-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.job-body h5 {
+    margin-bottom: 0.2rem;
+}
+
+.job-list {
+    margin: 0;
+    padding-left: 1.1rem;
+}
+
+.job-list li {
+    margin-bottom: 0.35rem;
+}
+
+.job-photo {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    margin-top: 0.9rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 575px) {
+    .job-card {
+        flex-direction: column;
+        gap: 0.7rem;
+    }
+
+    .job-logo-wrap {
+        justify-content: flex-start;
+    }
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 10px;
