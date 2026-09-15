@@ -66,6 +66,11 @@
                   <a class="nav-link active text-white fs-5" href="{% url 'home' %}#projects">Projects </a>
               </li>
             {% endblock projects %}
+            {% block experience %}
+              <li class="nav-item">
+                  <a class="nav-link active text-white fs-5" href="{% url 'home' %}#experience">Experience </a>
+              </li>
+            {% endblock experience %}
             {% block about %}
               <li class="nav-item">
                   <a class="nav-link active text-white fs-5" href="{% url 'home' %}#about">About </a>
