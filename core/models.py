@@ -32,3 +32,20 @@ class PageVisit(models.Model):
     def __str__(self):
         return f"{self.path} from {self.country or self.ip or 'unknown'}"
 
+
+class MediaClick(models.Model):
+    media = models.CharField(max_length=200, db_index=True)
+    kind = models.CharField(max_length=10, blank=True)
+    ip = models.GenericIPAddressField(null=True, blank=True, db_index=True)
+    country = models.CharField(max_length=100, blank=True, db_index=True)
+    country_code = models.CharField(max_length=2, blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    user_agent = models.CharField(max_length=400, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.media} opened from {self.country or self.ip or 'unknown'}"
+

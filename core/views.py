@@ -1,6 +1,12 @@
+import json
+
 from django.shortcuts import render
 from django.conf import settings
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.views.decorators.http import require_POST
+
 from .models import *
+from .tracking import cached_geo, client_ip, resolve_geo_later
 # Create your views here.
 
 def home(request):
@@ -47,6 +53,7 @@ ME_MEDIA = [
     ("image", "25-cat-plant.jpg", "The cat digging in a plant pot", "center 45%"),
     ("image", "01-park.jpg", "Zaid in the park", "center 25%"),
     ("image", "15-friends.jpg", "Zaid with friends", "center center"),
+    ("image", "28-bookshelf.jpg", "The bookshelf at home", "center center"),
     ("image", "17-mirror.jpg", "Mirror selfie", "center 25%"),
     ("image", "24-cat-lounging.jpg", "The cat lounging on the table", "center center"),
     ("image", "08-ghutra.jpg", "Zaid in a white ghutra", "center 40%"),
@@ -61,6 +68,9 @@ ME_MEDIA = [
 ]
 
 
+ME_MEDIA_NAMES = {name for _, name, _, _ in ME_MEDIA}
+
+
 def me(request):
     static_url = settings.STATIC_URL
     media = []
@@ -69,6 +79,7 @@ def me(request):
             poster = name.rsplit('.', 1)[0] + '.jpg'
             media.append({
                 'kind': 'video',
+                'name': name,
                 'src': f'{static_url}me/video/{name}',
                 'thumb': f'{static_url}me/posters/{poster}',
                 'alt': alt,
@@ -77,9 +88,41 @@ def me(request):
         else:
             media.append({
                 'kind': 'image',
+                'name': name,
                 'src': f'{static_url}me/{name}',
                 'thumb': f'{static_url}me/thumbs/{name}',
                 'alt': alt,
                 'pos': pos,
             })
     return render(request, 'me.html', {'media': media})
+
+
+@require_POST
+def track_click(request):
+    """Records which gallery item a visitor opened. Returns no content."""
+    try:
+        payload = json.loads(request.body.decode('utf-8') or '{}')
+    except (ValueError, UnicodeDecodeError):
+        return HttpResponseBadRequest('bad payload')
+
+    name = payload.get('name', '')
+    # Only names we actually publish get stored, so the table cannot be
+    # filled with arbitrary strings by anyone poking at the endpoint.
+    if name not in ME_MEDIA_NAMES:
+        return HttpResponseBadRequest('unknown media')
+
+    kind = 'video' if str(payload.get('kind')) == 'video' else 'image'
+    ip = client_ip(request)
+    geo = cached_geo(ip)
+    click = MediaClick.objects.create(
+        media=name,
+        kind=kind,
+        ip=ip,
+        country=geo[0] if geo else '',
+        country_code=geo[1] if geo else '',
+        city=geo[2] if geo else '',
+        user_agent=request.META.get('HTTP_USER_AGENT', '')[:400],
+    )
+    if not geo:
+        resolve_geo_later(MediaClick, click.pk, ip)
+    return HttpResponse(status=204)

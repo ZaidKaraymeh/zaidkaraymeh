@@ -66,22 +66,34 @@ def _lookup(ip):
     return geo
 
 
-def _resolve(visit_id, ip):
+def cached_geo(ip):
+    """Country already known for this IP, if we have looked it up before."""
+    return _geo_cache.get(ip) if ip else None
+
+
+def _resolve(model, obj_id, ip):
     try:
         geo = _lookup(ip)
         if not geo or not geo[0]:
             return
         country, code, city = geo
-        PageVisit.objects.filter(ip=ip, country='').update(
+        # Backfill every earlier row from this IP that is still missing a country.
+        model.objects.filter(ip=ip, country='').update(
             country=country, country_code=code, city=city
         )
-        PageVisit.objects.filter(pk=visit_id).update(
+        model.objects.filter(pk=obj_id).update(
             country=country, country_code=code, city=city
         )
     except Exception:
         logger.debug('geo lookup failed for %s', ip, exc_info=True)
     finally:
         connection.close()
+
+
+def resolve_geo_later(model, obj_id, ip):
+    """Fill in the country off the request thread so nobody waits on it."""
+    if ip:
+        _executor.submit(_resolve, model, obj_id, ip)
 
 
 class VisitLogMiddleware:
@@ -107,7 +119,7 @@ class VisitLogMiddleware:
             return
 
         ip = client_ip(request)
-        geo = _geo_cache.get(ip) if ip else None
+        geo = cached_geo(ip)
         visit = PageVisit.objects.create(
             path=request.path[:500],
             ip=ip,
@@ -117,5 +129,5 @@ class VisitLogMiddleware:
             referrer=request.META.get('HTTP_REFERER', '')[:500],
             user_agent=request.META.get('HTTP_USER_AGENT', '')[:400],
         )
-        if ip and not geo:
-            _executor.submit(_resolve, visit.pk, ip)
+        if not geo:
+            resolve_geo_later(PageVisit, visit.pk, ip)

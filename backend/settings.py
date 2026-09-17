@@ -129,6 +129,9 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# WhiteNoise's built-in table has no entry for .wav, so it would be served
+# as application/octet-stream.
+WHITENOISE_MIMETYPES = {".wav": "audio/wav"}
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 

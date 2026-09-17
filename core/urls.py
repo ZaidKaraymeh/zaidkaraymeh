@@ -5,4 +5,5 @@ urlpatterns = [
     path('blog', views.blog, name='blog'),
     path('blog/<str:title>', views.blog, name='blog_detail'),
     path('me', views.me, name='me'),
+    path('track/click', views.track_click, name='track_click'),
 ]

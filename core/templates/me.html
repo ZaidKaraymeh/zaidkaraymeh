@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block me %}
     <li class="nav-item">
@@ -7,12 +8,14 @@
 {% endblock me %}
 
 {% block content %}
+<meta name="csrf-token" content="{{ csrf_token }}">
 <div class="me-page">
     <div class="me-grid">
         {% for item in media %}
             <figure class="me-card">
                 <button type="button" class="me-card-btn" data-kind="{{ item.kind }}"
-                        data-full="{{ item.src }}" data-alt="{{ item.alt }}"
+                        data-name="{{ item.name }}" data-full="{{ item.src }}"
+                        data-alt="{{ item.alt }}"
                         aria-label="Open {{ item.alt }}">
                     {% if item.kind == 'video' %}
                         <video class="me-media" data-src="{{ item.src }}" poster="{{ item.thumb }}"
@@ -33,6 +36,30 @@
     <button type="button" class="me-lightbox-close" aria-label="Close">&times;</button>
     <img id="meLightboxImage" src="" alt="" hidden>
     <video id="meLightboxVideo" controls loop playsinline hidden></video>
+</div>
+
+<div class="goose" id="goose" aria-hidden="true" hidden>
+    <svg viewBox="0 0 100 92" width="100%" height="100%">
+        <g class="goose-legs">
+            <g class="goose-leg goose-leg-a">
+                <rect x="31" y="58" width="4.5" height="22" rx="2" fill="#e07d18"/>
+                <path d="M25 80 h16 l-3 5 h-10 Z" fill="#e07d18"/>
+            </g>
+            <g class="goose-leg goose-leg-b">
+                <rect x="49" y="58" width="4.5" height="22" rx="2" fill="#ffa53d"/>
+                <path d="M43 80 h16 l-3 5 h-10 Z" fill="#ffa53d"/>
+            </g>
+        </g>
+        <g class="goose-body">
+            <path d="M11 48 C4 40 13 31 21 36 Z" fill="#ffffff"/>
+            <ellipse cx="39" cy="50" rx="29" ry="16" fill="#ffffff"/>
+            <path d="M57 47 C65 34 66 20 67 12" stroke="#ffffff" stroke-width="11"
+                  stroke-linecap="round" fill="none"/>
+            <circle cx="68" cy="11" r="9.5" fill="#ffffff"/>
+            <path d="M77 6 L98 11 L77 17 Z" fill="#ff8c1a"/>
+            <circle cx="71" cy="7.5" r="2.2" fill="#242424"/>
+        </g>
+    </svg>
 </div>
 <script>
     (function () {
@@ -119,8 +146,32 @@
             });
         }
 
+        // Fire-and-forget: a failed beacon must never affect the gallery.
+        function trackClick(btn) {
+            try {
+                var meta = document.querySelector('meta[name="csrf-token"]');
+                fetch("{% url 'track_click' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": meta ? meta.getAttribute("content") : ""
+                    },
+                    body: JSON.stringify({
+                        name: btn.getAttribute("data-name"),
+                        kind: btn.getAttribute("data-kind")
+                    }),
+                    keepalive: true
+                }).catch(function () {});
+            } catch (err) {
+                // ignored on purpose
+            }
+        }
+
         document.querySelectorAll(".me-card-btn").forEach(function (btn) {
-            btn.addEventListener("click", function () { openItem(btn); });
+            btn.addEventListener("click", function () {
+                openItem(btn);
+                trackClick(btn);
+            });
         });
 
         closeBtn.addEventListener("click", closeLightbox);
@@ -130,6 +181,99 @@
         document.addEventListener("keydown", function (event) {
             if (event.key === "Escape" && !lightbox.hidden) closeLightbox();
         });
+    })();
+
+    // Goose.
+    (function () {
+        var GOOSE_INTERVAL = 60000;
+        var QUACK_SRC = "{% static 'sounds/quack.wav' %}";
+        var goose = document.getElementById("goose");
+        var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+        // A small pool so rapid clicks overlap instead of cutting each other off.
+        var pool = [];
+        var poolIndex = 0;
+        for (var i = 0; i < 4; i++) {
+            var sound = new Audio(QUACK_SRC);
+            sound.preload = "auto";
+            pool.push(sound);
+        }
+
+        function quack() {
+            try {
+                var sound = pool[poolIndex];
+                poolIndex = (poolIndex + 1) % pool.length;
+                sound.currentTime = 0;
+                var played = sound.play();
+                if (played && played.catch) {
+                    played.catch(function () {});
+                }
+            } catch (err) {
+                // A missing quack is never worth breaking the page over.
+            }
+        }
+
+        document.querySelectorAll('.me-card-btn[data-kind="image"]').forEach(function (btn) {
+            btn.addEventListener("click", quack);
+        });
+
+        // A different crossing every time: left or right, level or diagonal.
+        var GOOSE_SIZE = 92;
+        var walking = false;
+
+        function route() {
+            var vw = window.innerWidth;
+            var vh = window.innerHeight;
+            var offscreen = GOOSE_SIZE + 70;
+            var lowest = Math.max(10, vh - GOOSE_SIZE - 10);
+            var highest = Math.min(30, lowest);
+            var rightward = Math.random() < 0.5;
+            var startY, endY;
+
+            if (Math.random() < 0.45) {
+                // a level waddle along the lower part of the screen
+                startY = endY = lowest - Math.random() * Math.min(70, lowest - highest);
+            } else {
+                // a diagonal, forced to be steep enough to read as one
+                startY = highest + Math.random() * (lowest - highest);
+                endY = highest + Math.random() * (lowest - highest);
+                if (Math.abs(startY - endY) < vh * 0.22) {
+                    endY = startY > (highest + lowest) / 2 ? highest : lowest;
+                }
+            }
+
+            return {
+                from: [rightward ? -offscreen : vw + offscreen, startY],
+                to: [rightward ? vw + offscreen : -offscreen, endY],
+                // the sprite is drawn facing right
+                flip: rightward ? 1 : -1,
+                duration: 1600 + Math.random() * 1600
+            };
+        }
+
+        function walk() {
+            if (!goose || walking || document.hidden || reduceMotion.matches) return;
+            if (typeof goose.animate !== "function") return;
+
+            var plan = route();
+            walking = true;
+            goose.hidden = false;
+
+            var run = goose.animate([
+                { transform: "translate(" + plan.from[0] + "px, " + plan.from[1] + "px) scaleX(" + plan.flip + ")" },
+                { transform: "translate(" + plan.to[0] + "px, " + plan.to[1] + "px) scaleX(" + plan.flip + ")" }
+            ], { duration: plan.duration, easing: "linear" });
+
+            run.onfinish = function () {
+                goose.hidden = true;
+                walking = false;
+            };
+            run.oncancel = run.onfinish;
+        }
+
+        if (goose) {
+            setInterval(walk, GOOSE_INTERVAL);
+        }
     })();
 </script>
 {% endblock content %}
