@@ -189,26 +189,62 @@
         var goose = document.getElementById("goose");
         var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-        // A small pool so rapid clicks overlap instead of cutting each other off.
-        var pool = [];
-        var poolIndex = 0;
-        for (var i = 0; i < 4; i++) {
+        // Web Audio, not HTML <audio>: the gallery videos eat Safari/Chrome's
+        // few media-element slots, so a reused Audio pool goes silent after
+        // the clips have been looping (right around the first goose walk).
+        var audioCtx = null;
+        var quackBuffer = null;
+        var quackBytes = null;
+
+        function audioContext() {
+            var AC = window.AudioContext || window.webkitAudioContext;
+            if (!AC) return null;
+            if (!audioCtx) audioCtx = new AC();
+            return audioCtx;
+        }
+
+        function decodeQuack() {
+            var ctx = audioContext();
+            if (!ctx || !quackBytes || quackBuffer) return;
+            var copy = quackBytes.slice(0);
+            var done = function (buf) { quackBuffer = buf; };
+            if (ctx.decodeAudioData.length === 1) {
+                ctx.decodeAudioData(copy).then(done).catch(function () {});
+            } else {
+                ctx.decodeAudioData(copy, done, function () {});
+            }
+        }
+
+        if (window.fetch) {
+            fetch(QUACK_SRC).then(function (res) {
+                return res.arrayBuffer();
+            }).then(function (bytes) {
+                quackBytes = bytes;
+                decodeQuack();
+            }).catch(function () {});
+        }
+
+        function playHtmlQuack() {
             var sound = new Audio(QUACK_SRC);
-            sound.preload = "auto";
-            pool.push(sound);
+            var played = sound.play();
+            if (played && played.catch) played.catch(function () {});
         }
 
         function quack() {
             try {
-                var sound = pool[poolIndex];
-                poolIndex = (poolIndex + 1) % pool.length;
-                sound.currentTime = 0;
-                var played = sound.play();
-                if (played && played.catch) {
-                    played.catch(function () {});
+                var ctx = audioContext();
+                if (ctx && ctx.state === "suspended") ctx.resume();
+                if (ctx && quackBuffer) {
+                    var src = ctx.createBufferSource();
+                    src.buffer = quackBuffer;
+                    src.connect(ctx.destination);
+                    src.start(0);
+                    return;
                 }
+                playHtmlQuack();
+                decodeQuack();
             } catch (err) {
-                // A missing quack is never worth breaking the page over.
+                try { playHtmlQuack(); } catch (ignored) {}
             }
         }
 
