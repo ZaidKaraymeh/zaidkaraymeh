@@ -94,7 +94,10 @@ def me(request):
                 'alt': alt,
                 'pos': pos,
             })
-    return render(request, 'me.html', {'media': media})
+    return render(request, 'me.html', {
+        'media': media,
+        'quack_src': f'{static_url}sounds/quack.wav',
+    })
 
 
 @require_POST

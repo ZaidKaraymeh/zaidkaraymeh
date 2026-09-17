@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load static %}
 
 {% block me %}
     <li class="nav-item">
@@ -186,7 +185,7 @@
     // Goose.
     (function () {
         var GOOSE_INTERVAL = 60000;
-        var QUACK_SRC = "{% static 'sounds/quack.wav' %}";
+        var QUACK_SRC = "{{ quack_src }}";
         var goose = document.getElementById("goose");
         var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 

@@ -280,6 +280,66 @@ section h2 {
     cursor: pointer;
 }
 
+/* ---------- goose ---------- */
+
+/* The crossing itself is animated from JS so each appearance takes a
+   different route; only the waddle lives here. */
+.goose {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 92px;
+    height: 85px;
+    z-index: 1060;
+    pointer-events: none;
+    will-change: transform;
+}
+
+.goose[hidden] {
+    display: none;
+}
+
+.goose-body {
+    animation: goose-bob 0.24s ease-in-out infinite alternate;
+}
+
+.goose-leg {
+    transform-box: fill-box;
+    transform-origin: 50% 0;
+}
+
+.goose-leg-a {
+    animation: goose-step 0.24s ease-in-out infinite alternate;
+}
+
+.goose-leg-b {
+    animation: goose-step 0.24s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes goose-bob {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-3px);
+    }
+}
+
+@keyframes goose-step {
+    from {
+        transform: rotate(-26deg);
+    }
+    to {
+        transform: rotate(26deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .goose {
+        display: none;
+    }
+}
+
 /* ---------- breakpoints ---------- */
 
 @media (min-width: 576px) {
