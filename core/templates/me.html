@@ -9,10 +9,20 @@
 {% block content %}
 <div class="me-page">
     <div class="me-grid">
-        {% for photo in photos %}
+        {% for item in media %}
             <figure class="me-card">
-                <button type="button" class="me-card-btn" data-full="{{ photo.src }}" aria-label="Open {{ photo.alt }}">
-                    <img src="{{ photo.thumb }}" alt="{{ photo.alt }}" style="object-position: {{ photo.pos }};" loading="lazy" decoding="async">
+                <button type="button" class="me-card-btn" data-kind="{{ item.kind }}"
+                        data-full="{{ item.src }}" data-alt="{{ item.alt }}"
+                        aria-label="Open {{ item.alt }}">
+                    {% if item.kind == 'video' %}
+                        <video class="me-media" data-src="{{ item.src }}" poster="{{ item.thumb }}"
+                               style="object-position: {{ item.pos }};"
+                               muted loop playsinline preload="none"></video>
+                        <span class="me-play" aria-hidden="true"></span>
+                    {% else %}
+                        <img class="me-media" src="{{ item.thumb }}" alt="{{ item.alt }}"
+                             style="object-position: {{ item.pos }};" loading="lazy" decoding="async">
+                    {% endif %}
                 </button>
             </figure>
         {% endfor %}
@@ -20,45 +30,105 @@
 </div>
 
 <div class="me-lightbox" id="meLightbox" hidden>
-    <button type="button" class="me-lightbox-close" aria-label="Close photo">&times;</button>
-    <img src="" alt="">
+    <button type="button" class="me-lightbox-close" aria-label="Close">&times;</button>
+    <img id="meLightboxImage" src="" alt="" hidden>
+    <video id="meLightboxVideo" controls loop playsinline hidden></video>
 </div>
 <script>
     (function () {
         var lightbox = document.getElementById("meLightbox");
-        var image = lightbox.querySelector("img");
+        var lightImage = document.getElementById("meLightboxImage");
+        var lightVideo = document.getElementById("meLightboxVideo");
         var closeBtn = lightbox.querySelector(".me-lightbox-close");
+        var gridVideos = Array.prototype.slice.call(document.querySelectorAll(".me-card video"));
         var scrollY = 0;
 
-        function openPhoto(src, alt) {
-            image.src = src;
-            image.alt = alt || "";
+        // Grid clips stay muted and only load once they scroll into view.
+        function play(video) {
+            if (!video.src) {
+                video.src = video.getAttribute("data-src");
+            }
+            var started = video.play();
+            if (started && started.catch) {
+                started.catch(function () {});
+            }
+        }
+
+        if ("IntersectionObserver" in window) {
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        play(entry.target);
+                    } else {
+                        entry.target.pause();
+                    }
+                });
+            }, { rootMargin: "100px" });
+            gridVideos.forEach(function (video) { observer.observe(video); });
+        } else {
+            gridVideos.forEach(play);
+        }
+
+        function openItem(btn) {
+            var src = btn.getAttribute("data-full");
+            var alt = btn.getAttribute("data-alt") || "";
+
+            if (btn.getAttribute("data-kind") === "video") {
+                gridVideos.forEach(function (video) { video.pause(); });
+                lightImage.hidden = true;
+                lightVideo.hidden = false;
+                lightVideo.src = src;
+                lightVideo.muted = false;   // the click is the gesture that allows sound
+                lightVideo.currentTime = 0;
+                var started = lightVideo.play();
+                if (started && started.catch) {
+                    // Some browsers still refuse sound (iOS low power mode, for one).
+                    // Fall back to a muted play so the clip runs and controls can unmute it.
+                    started.catch(function () {
+                        lightVideo.muted = true;
+                        var retry = lightVideo.play();
+                        if (retry && retry.catch) {
+                            retry.catch(function () {});
+                        }
+                    });
+                }
+            } else {
+                lightVideo.hidden = true;
+                lightImage.hidden = false;
+                lightImage.src = src;
+                lightImage.alt = alt;
+            }
+
             lightbox.hidden = false;
             scrollY = window.scrollY;
             document.body.classList.add("no-scroll");
             document.body.style.top = "-" + scrollY + "px";
         }
 
-        function closePhoto() {
+        function closeLightbox() {
             lightbox.hidden = true;
-            image.removeAttribute("src");
+            lightImage.removeAttribute("src");
+            lightVideo.pause();
+            lightVideo.removeAttribute("src");
+            lightVideo.load();
             document.body.classList.remove("no-scroll");
             document.body.style.top = "";
             window.scrollTo(0, scrollY);
+            gridVideos.forEach(function (video) {
+                if (video.src) { play(video); }
+            });
         }
 
         document.querySelectorAll(".me-card-btn").forEach(function (btn) {
-            btn.addEventListener("click", function () {
-                openPhoto(btn.getAttribute("data-full"), btn.querySelector("img").alt);
-            });
+            btn.addEventListener("click", function () { openItem(btn); });
         });
 
-        closeBtn.addEventListener("click", closePhoto);
+        closeBtn.addEventListener("click", closeLightbox);
         lightbox.addEventListener("click", function (event) {
-            if (event.target !== image) closePhoto();
+            if (event.target === lightbox) closeLightbox();
         });
         document.addEventListener("keydown", function (event) {
-            if (event.key === "Escape" && !lightbox.hidden) closePhoto();
+            if (event.key === "Escape" && !lightbox.hidden) closeLightbox();
         });
     })();
 </script>
