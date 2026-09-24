@@ -1,11 +1,5 @@
 {% extends 'base.html' %}
 
-{% block me %}
-    <li class="nav-item">
-        <a class="nav-link active text-1 fs-5" href="{% url 'me' %}">Me </a>
-    </li>
-{% endblock me %}
-
 {% block content %}
 <meta name="csrf-token" content="{{ csrf_token }}">
 <div class="me-page">
