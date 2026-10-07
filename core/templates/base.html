@@ -47,7 +47,10 @@
   <body class="bg-1" style="overflow-x: hidden">
     <nav class="navbar navbar-expand-lg navbar-dark bg-1 fixed-top">
       <div class="container-fluid ">
-        <a class="navbar-brand fs-4 opacity-0" href="{% url 'home' %}">Zaid Karaymeh</a>
+        <a class="navbar-brand brand fs-4" href="{% url 'home' %}">
+          <img src="{% static 'brand/penguin.svg' %}" alt="" width="34" height="34" />
+          Zaid Karaymeh
+        </a>
         <button
         class="navbar-toggler"
         type="button"
@@ -93,7 +96,10 @@
               </li>
             {% endblock about %}
         </ul>
-        <a class="navbar-brand fs-4 opacity-0">Zaid Karaymeh</a>
+        <a class="navbar-brand brand fs-4 opacity-0" aria-hidden="true" tabindex="-1">
+          <img src="{% static 'brand/penguin.svg' %}" alt="" width="34" height="34" />
+          Zaid Karaymeh
+        </a>
     </div>
 </div>
     </nav>

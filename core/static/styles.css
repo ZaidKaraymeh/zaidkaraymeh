@@ -69,6 +69,19 @@ svg {
     max-width: 800px;
 }
 
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #fff !important;
+    font-weight: 500;
+}
+
+.brand img {
+    width: 34px;
+    height: 34px;
+}
+
 .navbar-collapse {
     max-height: 80vh;
     overflow-y: auto;
