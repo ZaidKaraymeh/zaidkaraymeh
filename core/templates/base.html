@@ -74,7 +74,6 @@
                 <a class="nav-link active text-white fs-5" href="{% url 'blog' %}">Blog </a>
               </li>
             {% endblock blog %}
-            {% block me %}{% endblock me %}
             {% block news %}
               <li class="nav-item">
                   <a class="nav-link active text-white fs-5" href="{% url 'home' %}#news">News </a>
@@ -95,6 +94,11 @@
                   <a class="nav-link active text-white fs-5" href="{% url 'home' %}#about">About </a>
               </li>
             {% endblock about %}
+            {% block me %}
+              <li class="nav-item">
+                <a class="nav-link active text-white fs-5" href="{% url 'me' %}">Me </a>
+              </li>
+            {% endblock me %}
         </ul>
         <a class="navbar-brand brand fs-4 opacity-0" aria-hidden="true" tabindex="-1">
           <img src="{% static 'brand/penguin.svg' %}" alt="" width="34" height="34" />
