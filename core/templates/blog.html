@@ -5,9 +5,11 @@
     </li>
 {% endblock blog %}
 {% block content %}
-<section  class="container container-margin my-5" style="min-height:100vh;">
+<section  class="container container-margin my-5 pt-5" style="min-height:100vh;">
 
     <h2> Latest Blog Posts </h2>
+    {% include 'partials/news_did_egypt.html' %}
+    {% include 'partials/news_zain.html' %}
     <div class="row">
     {% for blog in blogs %}
         <div class="col-xl-12 my-2">
