@@ -10,6 +10,7 @@
 {% block content %}
 <section class="container bg-1">
     <div class="hero d-flex flex-column justify-content-center align-items-center">
+        <img class="hero-photo" src="{% static 'news/zaid.jpg' %}" alt="Zaid Karaymeh" width="400" height="400" fetchpriority="high">
         <div class="text-center mb-2" >
             <h5 class="hero-intro"> Hello, I am </h5>
             <h1 class="color-animation hero-name" > Zaid Karaymeh </h1>
@@ -29,6 +30,63 @@
             </a>
         </div>
     </div>
+</section>
+<section id="news" class="container container-margin">
+    <h2> What's New </h2>
+
+    <article class="news-card">
+        <img class="news-photo" src="{% static 'news/did-egypt-signing.jpg' %}" alt="Signing the DID Egypt partnership" width="1024" height="765" loading="lazy" decoding="async">
+        <div class="news-body">
+            <p class="news-meta">October 2026 · Egypt</p>
+            <h3 class="news-title text-1">Voysera is now in Egypt with DID</h3>
+            <p class="text-2">We just signed DID (Dominic Development and Investment) as our exclusive partner in Egypt. They're based in Port Said and will sell and support Voysera across the country, handling local sales, client relationships and first line support.</p>
+            <p class="text-2">Why Egypt? It's the largest Arabic speaking market in the world, and people there expect to be served in Egyptian Arabic, not a textbook version of it. That's the Arabic our agents speak.</p>
+            <p class="text-2">DID has been running on Voysera since day one. Call their line and a concierge agent picks up in Egyptian Arabic, books a video meeting with the team and confirms it on WhatsApp. So the agent DID sells is the same one its clients talk to first.</p>
+            <p class="text-2">Next, we're taking this to banks, telecoms, retailers, healthcare providers and government services in Egypt.</p>
+            <a class="news-link" target="_blank" rel="noopener" href="https://lnkd.in/eUzg4Smm">Read the announcement <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+    </article>
+
+    <article class="news-card">
+        <img class="news-photo" src="{% static 'news/zain-signing.jpg' %}" alt="Signing with Zain Bahrain and OneCX" width="1024" height="649" loading="lazy" decoding="async">
+        <div class="news-body">
+            <p class="news-meta">May 2026 · Bahrain</p>
+            <h3 class="news-title text-1">Partnering with Zain Bahrain</h3>
+            <p class="text-2">We signed with Zain Bahrain, and our voice agents are now offered through OneCX, Zain's customer experience portfolio. Businesses already working with Zain can put Voysera on their lines through a provider they know and trust.</p>
+            <p class="text-2">The agents speak Bahraini and Khaleeji Arabic the way people actually talk, handle thousands of conversations at once around the clock, and follow up on WhatsApp, SMS and email. We built it for government, banking, healthcare, logistics, retail and telecom, from hospital appointments and delivery tracking to collections and onboarding.</p>
+            <a class="news-link" target="_blank" rel="noopener" href="https://www.newsofbahrain.com/business/132896.html">Read the story <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+    </article>
+</section>
+<section id="live" class="container container-margin my-5">
+    <h2> Call Them Yourself </h2>
+    <p class="text-2 mb-3">These agents are live and taking real calls right now. Pick up your phone and talk to them.</p>
+
+    <div class="live-grid">
+        <a class="live-card" href="tel:+97317540054">
+            <span class="live-org">Khaleeji Bank</span>
+            <span class="live-what text-2">AI call center, answering customers 24/7 in Arabic and English. Runs on Khaleeji's own servers.</span>
+            <span class="live-phone"><i class="fa-solid fa-phone"></i> 17540054</span>
+        </a>
+        <a class="live-card" href="tel:+97377971111">
+            <span class="live-org">GFH Financial Group</span>
+            <span class="live-what text-2">AI call center for GFH customers, any time of day, in whichever language you speak.</span>
+            <span class="live-phone"><i class="fa-solid fa-phone"></i> 77971111</span>
+        </a>
+        <a class="live-card" href="tel:+97317538538">
+            <span class="live-org">GFH Reception</span>
+            <span class="live-what text-2">Picks up the main line, works out who you're looking for and puts you through to them.</span>
+            <span class="live-phone"><i class="fa-solid fa-phone"></i> 17538538</span>
+        </a>
+    </div>
+
+    <article class="live-feature">
+        <img src="{% static 'news/ask-gfh-ai.jpg' %}" alt="Ask GFH AI voice kiosk" width="576" height="1024" loading="lazy" decoding="async">
+        <div>
+            <h3 class="news-title text-1">Ask GFH AI</h3>
+            <p class="text-2 mb-0">The same voice AI, on a screen. You walk up, ask a question out loud and it answers you, guiding guests and staff around the building and helping with whatever they need.</p>
+        </div>
+    </article>
 </section>
 <section id="blog" class="container container-margin my-5">
 
@@ -89,7 +147,7 @@
         </div>
         <div class="job-body">
             <h5 class="card-title text-1">Founder · Voysera</h5>
-            <p class="card-text text-white mb-2">Jan 2025 — Present · Bahrain</p>
+            <p class="card-text text-white mb-2">Jan 2025 to Present · Bahrain</p>
             <ul class="job-list text-2">
                 <li>Building Voice AI at scale for Arabic and English conversations across contact centers, CX, avatars, and smart kiosks.</li>
                 <li>Launched Voysera CX to unify voice, WhatsApp, Instagram, Facebook, and live chat in one inbox.</li>
@@ -103,7 +161,7 @@
         </div>
         <div class="job-body">
             <h5 class="card-title text-1">Software Engineer · GFH Financial Group</h5>
-            <p class="card-text text-white mb-2">Jun 2025 — Present · Full-time</p>
+            <p class="card-text text-white mb-2">Jun 2025 to Present · Full-time</p>
             <ul class="job-list text-2">
                 <li>Led an app revamp and restyle of the GFH digital banking experience.</li>
                 <li>Migrating legacy APIs to integrate directly with Temenos core banking.</li>
@@ -111,7 +169,7 @@
                 <li>Integrated sukuk subscriptions and sukuk redemptions.</li>
                 <li>Shipped in-app wakala renewal.</li>
                 <li>Maintained and enhanced the existing chatbot, plus internal systems.</li>
-                <li>Built a Voice AI call-center agent on 77991111.</li>
+                <li>Built a Voice AI call center agent on 77971111.</li>
                 <li>Built a reception AI agent that transfers calls to internal staff on 17538538 and 17549549.</li>
                 <li>Built a lobby kiosk reception agent that guides guests and staff through the building and answers questions.</li>
             </ul>
@@ -125,13 +183,13 @@
         </div>
         <div class="job-body">
             <h5 class="card-title text-1">Software Engineer · Khaleeji</h5>
-            <p class="card-text text-white mb-2">Aug 2023 — Oct 2025 · Manama, Bahrain</p>
+            <p class="card-text text-white mb-2">Aug 2023 to Oct 2025 · Manama, Bahrain</p>
             <ul class="job-list text-2">
                 <li>Core engineer on the GFH / Khaleeji investment and retail apps, including card management and UI systems in Mendix.</li>
                 <li>KYC and customer onboarding on kiosk machines: biometrics, ID, name screening, Benefit eKYC, and IGA checks.</li>
                 <li>Deployed debit card printing on kiosks and created the Khaleeji Offers Portal (frontend, backend, and infra).</li>
                 <li>Built mandate integrations: VISA Direct Debit, EWA, and open banking.</li>
-                <li>Introduced Bitrise CI/CD and a Python bundling script that cut Mendix mobile builds from 50–60 minutes to 2–5 minutes.</li>
+                <li>Introduced Bitrise CI/CD and a Python bundling script that cut Mendix mobile builds from 50 to 60 minutes down to 2 to 5 minutes.</li>
                 <li>IoT ID/passport scanner in Java (MRZ/VIZ), plus digitization of internal paper workflows.</li>
             </ul>
         </div>
@@ -143,7 +201,7 @@
         </div>
         <div class="job-body">
             <h5 class="card-title text-1">Software Engineer · Infinios</h5>
-            <p class="card-text text-white mb-2">Jul 2022 — Aug 2023 · Internship · Seef, Bahrain</p>
+            <p class="card-text text-white mb-2">Jul 2022 to Aug 2023 · Internship · Seef, Bahrain</p>
             <ul class="job-list text-2">
                 <li>Rewrote the notification service (SMS, email) in Java Spring Boot and MSSQL using SMTP and SMPP.</li>
                 <li>Rebuilt a file repository and security-scanning API/UI in ASP .NET 7 and Vue 3; halved list/upload times.</li>
@@ -158,7 +216,7 @@
         </div>
         <div class="job-body">
             <h5 class="card-title text-1">React Native Developer · Tamarran</h5>
-            <p class="card-text text-white mb-2">Feb 2022 — Jun 2022 · Internship</p>
+            <p class="card-text text-white mb-2">Feb 2022 to Jun 2022 · Internship</p>
             <ul class="job-list text-2">
                 <li>Designed a subscription feature in Figma and built a React Native (TypeScript) prototype to attract new users.</li>
             </ul>
@@ -171,7 +229,7 @@
     <div class="row">
         <div class="col-xl-12 my-2 ">
             <h6  class="text-justify text-p text-2 mb-3 mx-3"> 
-                I'm Zaid Karaymeh, founder of Voysera, where we build Voice AI you can actually talk to: interrupt it, switch languages, go off-script, and it keeps up. At GFH I work on digital banking, Temenos integrations, transfers, sukuk, wakala, and Voice AI for the lobby and call center. I graduated from the University of Bahrain with a bachelor's in Computer Science (2020–2024). Based in Bahrain.
+                I'm Zaid Karaymeh, founder of Voysera, where we build Voice AI you can actually talk to: interrupt it, switch languages, go off-script, and it keeps up. At GFH I work on digital banking, Temenos integrations, transfers, sukuk, wakala, and Voice AI for the lobby and call center. I graduated from the University of Bahrain with a bachelor's in Computer Science (2020 to 2024). Based in Bahrain.
             </h6>
             <article class="job-card mt-3">
                 <div class="job-logo-wrap">
@@ -179,7 +237,7 @@
                 </div>
                 <div class="job-body">
                     <h5 class="card-title text-1">University of Bahrain</h5>
-                    <p class="card-text text-white mb-0">Bachelor's, Computer Science · 2020–2024 · Sakheer, Bahrain</p>
+                    <p class="card-text text-white mb-0">Bachelor's, Computer Science · 2020 to 2024 · Sakheer, Bahrain</p>
                 </div>
             </article>
             <h5 class="mt-4"> Skills </h5>

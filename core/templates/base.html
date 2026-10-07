@@ -57,6 +57,11 @@
               </li>
             {% endblock blog %}
             {% block me %}{% endblock me %}
+            {% block news %}
+              <li class="nav-item">
+                  <a class="nav-link active text-white fs-5" href="{% url 'home' %}#news">News </a>
+              </li>
+            {% endblock news %}
             {% block projects %}
               <li class="nav-item">
                   <a class="nav-link active text-white fs-5" href="{% url 'home' %}#projects">Projects </a>
