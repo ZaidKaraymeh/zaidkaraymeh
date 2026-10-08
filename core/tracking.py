@@ -12,7 +12,19 @@ from .models import PageVisit
 logger = logging.getLogger(__name__)
 
 SKIP_PREFIXES = ('/static/', '/media/', '/admin/', '/favicon.ico')
-GEO_ENDPOINT = 'https://ipwho.is/{ip}?fields=success,country,country_code,city'
+
+# Free lookups rate-limit per caller IP, and Railway's egress IPs are shared with
+# other apps, so any one of them can be exhausted for hours. Tried in order.
+GEO_PROVIDERS = (
+    ('https://ipwho.is/{ip}?fields=success,country,country_code,city',
+     lambda p: p.get('success') and (p.get('country'), p.get('country_code'), p.get('city'))),
+    ('https://get.geojs.io/v1/ip/geo/{ip}.json',
+     lambda p: (p.get('country'), p.get('country_code'), p.get('city'))),
+    ('https://freeipapi.com/api/json/{ip}',
+     lambda p: (p.get('countryName'), p.get('countryCode'), p.get('cityName'))),
+    ('http://ip-api.com/json/{ip}?fields=status,country,countryCode,city',
+     lambda p: p.get('status') == 'success' and (p.get('country'), p.get('countryCode'), p.get('city'))),
+)
 
 _executor = ThreadPoolExecutor(max_workers=2, thread_name_prefix='geo')
 _geo_cache = {}
@@ -39,6 +51,21 @@ def _is_private(ip):
         return True
 
 
+def _fetch_geo(ip):
+    for url, parse in GEO_PROVIDERS:
+        try:
+            request = urllib.request.Request(url.format(ip=ip), headers={'User-Agent': 'zaidkaraymeh.com'})
+            with urllib.request.urlopen(request, timeout=4) as response:
+                fields = parse(json.load(response))
+        except (urllib.error.URLError, OSError, ValueError, TimeoutError) as exc:
+            logger.warning('geo provider %s failed for %s: %s', url.split('/')[2], ip, exc)
+            continue
+        if fields and fields[0]:
+            country, code, city = (value or '' for value in fields)
+            return country, code[:2], city
+    return None
+
+
 def _lookup(ip):
     if ip in _geo_cache:
         return _geo_cache[ip]
@@ -46,19 +73,10 @@ def _lookup(ip):
     if _is_private(ip):
         geo = ('Local network', '', '')
     else:
-        try:
-            with urllib.request.urlopen(GEO_ENDPOINT.format(ip=ip), timeout=4) as response:
-                payload = json.load(response)
-        except (urllib.error.URLError, OSError, ValueError, TimeoutError):
-            # A failed lookup is not cached so the next visit can retry.
+        # A failed lookup is not cached so the next visit can retry.
+        geo = _fetch_geo(ip)
+        if not geo:
             return None
-        if not payload.get('success'):
-            return None
-        geo = (
-            payload.get('country') or '',
-            (payload.get('country_code') or '')[:2],
-            payload.get('city') or '',
-        )
 
     if len(_geo_cache) > 1000:
         _geo_cache.clear()
